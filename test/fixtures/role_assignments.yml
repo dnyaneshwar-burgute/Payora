@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  role: one
+  effective_from: 2026-09-30 15:21:45
+  effective_to: 2026-09-30 15:21:45
+  assigned_by: one
+
+two:
+  user: two
+  role: two
+  effective_from: 2026-09-30 15:21:45
+  effective_to: 2026-09-30 15:21:45
+  assigned_by: two
