@@ -1,0 +1,13 @@
+one:
+  name: Manager
+  key: manager
+  kind: custom
+  system: false
+  organization: acme
+
+two:
+  name: Employee
+  key: employee
+  kind: custom
+  system: false
+  organization: acme

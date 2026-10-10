@@ -2,7 +2,7 @@ class User < ApplicationRecord
   has_secure_password
   has_many :sessions, dependent: :destroy
 
-  belongs_to :organization
+  belongs_to :organization, inverse_of: :users
   belongs_to :parent, class_name: "User", optional: true
   has_many :children, class_name: "User", foreign_key: :parent_id, inverse_of: :parent, dependent: :restrict_with_error
 

@@ -1,24 +1,11 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= content_for(:title) || "Salary Management System" %></title>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="application-name" content="Salary Management System">
-    <meta name="mobile-web-app-capable" content="yes">
-    <%= csrf_meta_tags %>
-    <%= csp_meta_tag %>
-
-    <%= yield :head %>
+    <%= render "layouts/head" %>
 
     <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
     <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
 
-    <link rel="icon" href="/icon.png" type="image/png">
-    <link rel="icon" href="/icon.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="/icon.png">
-
-    <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= vite_client_tag %>
     <%= vite_react_refresh_tag %>
     <%= vite_javascript_tag "application.tsx" %>
@@ -26,6 +13,26 @@
   </head>
 
   <body>
+    <nav class="navbar navbar-dark bg-dark">
+      <div class="container">
+        <%= link_to "Salary Management", root_path, class: "navbar-brand" %>
+
+        <div class="d-flex align-items-center gap-2">
+          <% if authenticated? %>
+            <span class="navbar-text me-2"><%= Current.user.first_name %> <%= Current.user.last_name %></span>
+            <%= button_to "Sign out", session_path, method: :delete, class: "btn btn-outline-light btn-sm" %>
+          <% else %>
+            <%= link_to "Sign in", new_session_path, class: "btn btn-outline-light btn-sm" %>
+            <%= link_to "Register organization", new_registration_path, class: "btn btn-primary btn-sm" %>
+          <% end %>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container pt-3">
+      <%= render "layouts/flash" %>
+    </div>
+
     <%= yield %>
   </body>
 </html>
