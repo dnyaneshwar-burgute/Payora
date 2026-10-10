@@ -1,6 +1,8 @@
 class User < ApplicationRecord
   has_secure_password
   has_many :sessions, dependent: :destroy
+  has_many :role_assignments, dependent: :destroy
+  has_many :invitations, dependent: :destroy
 
   belongs_to :organization, inverse_of: :users
   belongs_to :parent, class_name: "User", optional: true
@@ -13,6 +15,14 @@ class User < ApplicationRecord
   validates :email_address, presence: true, uniqueness: { case_sensitive: false }, format: { with: URI::MailTo::EMAIL_REGEXP }
   validates :phone_number, format: { with: /\A\+?[0-9][0-9\s\-()]{6,19}\z/ }, allow_blank: true
   validate :parent_belongs_to_same_organization
+
+  def full_name
+    "#{first_name} #{last_name}"
+  end
+
+  def platform_admin?
+    role_assignments.active.joins(:role).merge(Role.platform_admin).exists?
+  end
 
   private
 

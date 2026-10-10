@@ -3,7 +3,6 @@ class OrganizationRegistrationService
 
   def initialize(params)
     @organization = Organization.new(params)
-    @organization.status = "active"
     @organization.users.each { |user| user.password = SecureRandom.base58(24) }
   end
 

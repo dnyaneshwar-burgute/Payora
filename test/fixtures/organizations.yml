@@ -1,4 +1,14 @@
 acme:
   name: Acme
   host: acme.example.com
-  status: active
+  status: approved
+
+platform:
+  name: Platform
+  host: platform.example.com
+  status: approved
+
+pending:
+  name: Pending Co
+  host: pending.example.com
+  status: created

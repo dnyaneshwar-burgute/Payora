@@ -32,12 +32,12 @@ class AuthenticationFlowTest < ActionDispatch::IntegrationTest
       post registration_path, params: @params
     end
 
-    assert_redirected_to root_path
-    assert cookies[:session_id].present?
+    assert_redirected_to new_session_path
+    assert cookies[:session_id].blank?
 
     organization = Organization.last
     assert_equal "globex.example.com", organization.host
-    assert_equal "active", organization.status
+    assert organization.created?
 
     owner = organization.users.sole
     assignment = RoleAssignment.find_by!(user: owner)
@@ -61,7 +61,6 @@ class AuthenticationFlowTest < ActionDispatch::IntegrationTest
 
   test "rejects a duplicate host" do
     post registration_path, params: @params
-    delete session_path
 
     @params[:organization][:users_attributes]["0"][:email_address] = "other@globex.test"
     assert_no_difference -> { Organization.count } do
@@ -79,13 +78,11 @@ class AuthenticationFlowTest < ActionDispatch::IntegrationTest
     assert_select ".alert-danger", text: /Exactly one owner account is required/
   end
 
-  test "signs the owner in after registration and out again" do
-    post registration_path, params: @params
-    follow_redirect!
-    assert_select "button", text: "Sign out"
-
-    delete session_path
+  test "blocks sign in until the organization is approved" do
+    post session_path, params: { email_address: users(:pending_owner).email_address, password: "password" }
     assert_redirected_to new_session_path
+    assert cookies[:session_id].blank?
+    assert_equal "Your organization has not been approved yet.", flash[:alert]
   end
 
   test "signs in with email and password" do
@@ -94,5 +91,8 @@ class AuthenticationFlowTest < ActionDispatch::IntegrationTest
 
     follow_redirect!
     assert_select "button", text: "Sign out"
+
+    delete session_path
+    assert_redirected_to new_session_path
   end
 end

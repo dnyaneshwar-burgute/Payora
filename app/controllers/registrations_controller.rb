@@ -13,8 +13,7 @@ class RegistrationsController < ApplicationController
     @organization = registration.organization
 
     if registration.call
-      start_new_session_for registration.owner
-      redirect_to root_path, notice: "Welcome! #{@organization.name} has been registered."
+      redirect_to new_session_path, notice: "#{@organization.name} has been registered. You will receive an invitation email once it is approved."
     else
       @organization.users.build if @organization.users.empty?
       render :new, status: :unprocessable_entity

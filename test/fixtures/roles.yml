@@ -11,3 +11,16 @@ two:
   kind: custom
   system: false
   organization: acme
+
+platform_admin:
+  name: Platform Admin
+  key: platform_admin
+  kind: platform_admin
+  system: true
+
+pending_owner:
+  name: Owner
+  key: owner
+  kind: organization_owner
+  system: true
+  organization: pending

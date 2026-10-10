@@ -19,7 +19,10 @@
 
         <div class="d-flex align-items-center gap-2">
           <% if authenticated? %>
-            <span class="navbar-text me-2"><%= Current.user.first_name %> <%= Current.user.last_name %></span>
+            <% if Current.user.platform_admin? %>
+              <%= link_to "Organizations", admin_organizations_path, class: "btn btn-link btn-sm text-light text-decoration-none" %>
+            <% end %>
+            <span class="navbar-text me-2"><%= Current.user.full_name %></span>
             <%= button_to "Sign out", session_path, method: :delete, class: "btn btn-outline-light btn-sm" %>
           <% else %>
             <%= link_to "Sign in", new_session_path, class: "btn btn-outline-light btn-sm" %>

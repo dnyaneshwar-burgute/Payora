@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_30_095145) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_10_090109) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -37,13 +37,28 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_30_095145) do
     t.index ["parent_id"], name: "index_departments_on_parent_id"
   end
 
+  create_table "invitations", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "role_id", null: false
+    t.bigint "invited_by_id", null: false
+    t.datetime "accepted_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["invited_by_id"], name: "index_invitations_on_invited_by_id"
+    t.index ["role_id"], name: "index_invitations_on_role_id"
+    t.index ["user_id"], name: "index_invitations_on_user_id"
+  end
+
   create_table "organizations", force: :cascade do |t|
     t.string "name", null: false
     t.string "host", null: false
-    t.string "status", null: false
+    t.string "status", default: "created", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "rejection_reason"
     t.index ["host"], name: "index_organizations_on_host", unique: true
+    t.check_constraint "status::text <> 'rejected'::text OR rejection_reason IS NOT NULL", name: "organizations_rejection_reason_required_when_rejected"
+    t.check_constraint "status::text = ANY (ARRAY['created'::character varying, 'approved'::character varying, 'rejected'::character varying]::text[])", name: "organizations_status_values"
   end
 
   create_table "role_assignments", force: :cascade do |t|
@@ -105,6 +120,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_30_095145) do
   add_foreign_key "department_assignments", "users", column: "assigned_by_id"
   add_foreign_key "departments", "departments", column: "parent_id"
   add_foreign_key "departments", "organizations"
+  add_foreign_key "invitations", "roles"
+  add_foreign_key "invitations", "users"
+  add_foreign_key "invitations", "users", column: "invited_by_id"
   add_foreign_key "role_assignments", "roles"
   add_foreign_key "role_assignments", "users"
   add_foreign_key "role_assignments", "users", column: "assigned_by_id"

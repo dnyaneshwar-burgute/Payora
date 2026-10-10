@@ -13,3 +13,15 @@ two:
   effective_from: 2026-09-30 15:21:45
   effective_to: 2026-09-30 15:21:45
   assigned_by: two
+
+admin:
+  user: admin
+  role: platform_admin
+  effective_from: <%= 1.day.ago.to_fs(:db) %>
+  assigned_by: admin
+
+pending_owner:
+  user: pending_owner
+  role: pending_owner
+  effective_from: <%= 1.day.ago.to_fs(:db) %>
+  assigned_by: pending_owner
