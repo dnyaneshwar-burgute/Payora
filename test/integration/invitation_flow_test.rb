@@ -13,11 +13,13 @@ class InvitationFlowTest < ActionDispatch::IntegrationTest
     assert_equal [ users(:pending_owner).email_address ], mail.to
     assert_match "Pending Co", mail.subject
 
-    token = mail.text_part.body.to_s[%r{http://example\.com/invitations/([^/]+)/edit}, 1]
+    token = mail.text_part.body.to_s[%r{http://pending\.example\.com/invitations/([^/]+)/edit}, 1]
     assert_equal @invitation, Invitation.find_by_token_for(:acceptance, token)
   end
 
   test "sets the password from the invitation link and signs the user in" do
+    host! organizations(:pending).host
+
     get edit_invitation_path(@token)
     assert_response :success
     assert_select "input[type=password]", count: 2
@@ -27,6 +29,10 @@ class InvitationFlowTest < ActionDispatch::IntegrationTest
     assert cookies[:session_id].present?
     assert @invitation.reload.accepted_at.present?
     assert users(:pending_owner).reload.authenticate("new-secret-password")
+
+    follow_redirect!
+    assert_response :success
+    assert_select "h1", text: "Pending Co"
   end
 
   test "the link cannot be reused after acceptance" do

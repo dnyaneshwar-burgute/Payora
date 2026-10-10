@@ -18,6 +18,13 @@ platform_admin:
   kind: platform_admin
   system: true
 
+acme_owner:
+  name: Owner
+  key: owner
+  kind: organization_owner
+  system: true
+  organization: acme
+
 pending_owner:
   name: Owner
   key: owner

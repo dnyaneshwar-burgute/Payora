@@ -5,6 +5,6 @@
 </p>
 
 <p>
-  <%= link_to "Set your password", edit_invitation_url(@token) %> to activate your account.
+  <%= link_to "Set your password", edit_invitation_url(@token, host: @organization.host) %> to activate your account.
   This link will expire in <%= distance_of_time_in_words(0, Invitation::EXPIRES_IN) %>.
 </p>

@@ -1,6 +1,8 @@
 class Invitation < ApplicationRecord
   EXPIRES_IN = 7.days
 
+  scoped_to_organization through: :user
+
   belongs_to :user
   belongs_to :role
   belongs_to :invited_by, class_name: "User"

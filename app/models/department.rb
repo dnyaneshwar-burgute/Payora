@@ -1,4 +1,6 @@
 class Department < ApplicationRecord
+  scoped_to_organization
+
   belongs_to :organization, inverse_of: :departments
   belongs_to :parent, class_name: "Department", optional: true
 

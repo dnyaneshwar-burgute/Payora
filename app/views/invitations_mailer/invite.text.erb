@@ -2,6 +2,6 @@ Hi <%= @user.first_name %>,
 
 You have been invited to join <%= @organization.name %> as <%= @invitation.role.name %>.
 
-Set your password to activate your account: <%= edit_invitation_url(@token) %>
+Set your password to activate your account: <%= edit_invitation_url(@token, host: @organization.host) %>
 
 This link will expire in <%= distance_of_time_in_words(0, Invitation::EXPIRES_IN) %>.

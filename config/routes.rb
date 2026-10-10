@@ -1,13 +1,23 @@
 Rails.application.routes.draw do
   resource :session
   resources :passwords, param: :token
-  resource :registration, only: %i[ new create ]
   resources :invitations, only: %i[ edit update ], param: :token
 
-  namespace :admin do
-    resources :organizations, only: %i[ index show ] do
-      member do
-        patch :change_state
+  constraints OrganizationDomain do
+    scope module: :tenant, as: :tenant do
+      resource :dashboard, only: :show
+      root "dashboards#show"
+    end
+  end
+
+  constraints PlatformDomain do
+    resource :registration, only: %i[ new create ]
+
+    namespace :admin do
+      resources :organizations, only: %i[ index show ] do
+        member do
+          patch :change_state
+        end
       end
     end
   end

@@ -1,4 +1,6 @@
 class Role < ApplicationRecord
+  scoped_to_organization
+
   belongs_to :organization, optional: true, inverse_of: :roles
 
   enum :kind, {

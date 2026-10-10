@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+  scoped_to_organization
+
   has_secure_password
   has_many :sessions, dependent: :destroy
   has_many :role_assignments, dependent: :destroy
@@ -20,8 +22,9 @@ class User < ApplicationRecord
     "#{first_name} #{last_name}"
   end
 
+  # The platform admin role has no organization, so it must be looked up outside the organization scope.
   def platform_admin?
-    role_assignments.active.joins(:role).merge(Role.platform_admin).exists?
+    role_assignments.active.where(role_id: Role.unscoped.platform_admin.select(:id)).exists?
   end
 
   private

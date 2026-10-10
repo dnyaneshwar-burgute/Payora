@@ -20,6 +20,12 @@ admin:
   effective_from: <%= 1.day.ago.to_fs(:db) %>
   assigned_by: admin
 
+acme_owner:
+  user: acme_owner
+  role: acme_owner
+  effective_from: <%= 1.day.ago.to_fs(:db) %>
+  assigned_by: acme_owner
+
 pending_owner:
   user: pending_owner
   role: pending_owner

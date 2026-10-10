@@ -1,6 +1,6 @@
 <% content_for :title, "Sign in" %>
 
-<h2 class="h5 mb-3">Sign in</h2>
+<h2 class="h5 mb-3">Sign in<%= " to #{Current.organization.name}" if Current.organization %></h2>
 
 <%= form_with url: session_path do |form| %>
   <div class="mb-3">
@@ -18,5 +18,7 @@
 
 <div class="d-flex justify-content-between mt-3 small">
   <%= link_to "Forgot password?", new_password_path %>
-  <%= link_to "Register your organization", new_registration_path %>
+  <% unless Current.organization %>
+    <%= link_to "Register your organization", new_registration_path %>
+  <% end %>
 </div>

@@ -14,6 +14,13 @@ two:
   password_digest: <%= password_digest %>
   organization: acme
 
+acme_owner:
+  first_name: Acme
+  last_name: Owner
+  email_address: owner@acme.example.com
+  password_digest: <%= password_digest %>
+  organization: acme
+
 admin:
   first_name: Platform
   last_name: Admin

@@ -1,4 +1,6 @@
 class DepartmentAssignment < ApplicationRecord
+  scoped_to_organization through: :user
+
   belongs_to :user
   belongs_to :department
   belongs_to :assigned_by, class_name: "User"

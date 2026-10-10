@@ -15,18 +15,22 @@
   <body>
     <nav class="navbar navbar-dark bg-dark">
       <div class="container">
-        <%= link_to "Salary Management", root_path, class: "navbar-brand" %>
+        <%= link_to Current.organization&.name || "Salary Management", root_path, class: "navbar-brand" %>
 
         <div class="d-flex align-items-center gap-2">
           <% if authenticated? %>
-            <% if Current.user.platform_admin? %>
+            <% if Current.organization %>
+              <%= link_to "Dashboard", tenant_dashboard_path, class: "btn btn-link btn-sm text-light text-decoration-none" %>
+            <% elsif Current.user.platform_admin? %>
               <%= link_to "Organizations", admin_organizations_path, class: "btn btn-link btn-sm text-light text-decoration-none" %>
             <% end %>
             <span class="navbar-text me-2"><%= Current.user.full_name %></span>
             <%= button_to "Sign out", session_path, method: :delete, class: "btn btn-outline-light btn-sm" %>
           <% else %>
             <%= link_to "Sign in", new_session_path, class: "btn btn-outline-light btn-sm" %>
-            <%= link_to "Register organization", new_registration_path, class: "btn btn-primary btn-sm" %>
+            <% unless Current.organization %>
+              <%= link_to "Register organization", new_registration_path, class: "btn btn-primary btn-sm" %>
+            <% end %>
           <% end %>
         </div>
       </div>
