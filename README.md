@@ -59,9 +59,24 @@ Things you may want to cover:
   sudo vi /etc/hosts
   127.0.0.1 demo.fli.com
 
+  in vite allow domain *.fli.com so that assets will be available for demo.fli.com
+  const allowedOrigins = [
+    /^https?:\/\/(?:(?:[^:]+\.)?localhost|127\.0\.0\.1|\[::1\])(?::\d+)?$/,
+    /^https?:\/\/(?:[^:]+\.)?fli\.com(?::\d+)?$/,
+  ]
+  export default defineConfig({
+    plugins: [
+      RubyPlugin(),
+      react(),
+    ],
+    server: {
+      cors: {
+        origin: allowedOrigins,
+      },
+    },
+  })
   For Plaform Admin URL will be 
   http://localhost:3000
 
   For Organization Url will be
   http://demo.fli.com
-
