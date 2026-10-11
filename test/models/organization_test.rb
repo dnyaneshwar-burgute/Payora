@@ -7,6 +7,19 @@ class OrganizationTest < ActiveSupport::TestCase
     assert Organization.new(name: "New", host: "new.example.com").created?
   end
 
+  test "known hosts are permitted by host authorization" do
+    permissions = ActionDispatch::HostAuthorization::Permissions.new([ ->(host) { Organization.known_host?(host) } ])
+
+    assert Organization.known_host?("acme.example.com")
+    assert Organization.known_host?("ACME.EXAMPLE.COM:3000")
+    assert_not Organization.known_host?("missing.example.com")
+    assert_not Organization.known_host?(nil)
+
+    assert permissions.allows?("acme.example.com")
+    assert permissions.allows?("acme.example.com:3000")
+    assert_not permissions.allows?("missing.example.com")
+  end
+
   test "approving invites the owners after commit" do
     organization = organizations(:pending)
 

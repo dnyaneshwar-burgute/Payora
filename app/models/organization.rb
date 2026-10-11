@@ -1,6 +1,15 @@
 class Organization < ApplicationRecord
   include AASM
 
+  # Host Authorization passes the raw Host header, which may include a port.
+  def self.known_host?(request_host)
+    Rails.logger.info("************ #{request_host} **********")
+    hostname = request_host.to_s.sub(/:\d+\z/, "").downcase
+    return false if hostname.blank?
+
+    exists?(host: hostname)
+  end
+
   has_many :roles, dependent: :destroy, inverse_of: :organization
   has_many :departments, dependent: :delete_all, inverse_of: :organization
   has_many :users, dependent: :restrict_with_error, inverse_of: :organization
