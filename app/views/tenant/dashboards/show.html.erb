@@ -11,16 +11,28 @@
 
   <p class="text-muted">Welcome back, <%= Current.user.first_name %>.</p>
 
-  <div class="row g-3">
-    <% { "Users" => @users_count, "Departments" => @departments_count, "Roles" => @roles_count }.each do |label, count| %>
+  <% if Current.user.organization_owner? %>
+    <div class="row g-3">
+      <% { "Users" => @users_count, "Departments" => @departments_count }.each do |label, count| %>
+        <div class="col-md-4">
+          <div class="card shadow-sm h-100">
+            <div class="card-body">
+              <div class="text-muted small"><%= label %></div>
+              <div class="h3 mb-0"><%= count %></div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+
       <div class="col-md-4">
         <div class="card shadow-sm h-100">
-          <div class="card-body">
-            <div class="text-muted small"><%= label %></div>
-            <div class="h3 mb-0"><%= count %></div>
+          <div class="card-body d-flex flex-column">
+            <div class="text-muted small">Users by role</div>
+            <p class="small text-muted mt-2 mb-3">How many people currently hold each role.</p>
+            <%= link_to "View report", tenant_dashboard_roles_path, class: "btn btn-outline-primary btn-sm mt-auto align-self-start" %>
           </div>
         </div>
       </div>
-    <% end %>
-  </div>
+    </div>
+  <% end %>
 </div>

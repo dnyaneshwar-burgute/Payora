@@ -27,6 +27,10 @@ class User < ApplicationRecord
     role_assignments.active.where(role_id: Role.unscoped.platform_admin.select(:id)).exists?
   end
 
+  def organization_owner?
+    role_assignments.active.joins(:role).merge(Role.organization_owner).exists?
+  end
+
   private
 
   def parent_belongs_to_same_organization

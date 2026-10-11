@@ -17,6 +17,9 @@ class Tenant::DashboardsControllerTest < ActionDispatch::IntegrationTest
     follow_redirect!
     assert_response :success
     assert_select "h1", text: "Acme"
+    assert_select "aside a", text: "Dashboard"
+    sidebar = css_select("aside").first.inner_html
+    assert sidebar.index("Dashboard") < sidebar.index("Sign out")
   end
 
   test "only counts records of the current organization" do
@@ -25,7 +28,18 @@ class Tenant::DashboardsControllerTest < ActionDispatch::IntegrationTest
     get tenant_dashboard_path
     assert_select ".card-body", text: /Users\s+3/
     assert_select ".card-body", text: /Departments\s+2/
-    assert_select ".card-body", text: /Roles\s+3/
+    assert_select "a", text: "View report"
+  end
+
+  test "lists active users per role for the organization owner" do
+    sign_in_as users(:acme_owner)
+
+    get tenant_dashboard_roles_path
+    assert_response :success
+    assert_select "tbody tr", count: 3
+    assert_select "tr", text: /Employee\s+0/
+    assert_select "tr", text: /Manager\s+0/
+    assert_select "tr", text: /Owner\s+1/
   end
 
   test "users of another organization cannot sign in on this domain" do
@@ -41,6 +55,13 @@ class Tenant::DashboardsControllerTest < ActionDispatch::IntegrationTest
 
     get tenant_dashboard_path
     assert_response :success
+    assert_select "h1", text: "Acme"
+    assert_select ".card-body", count: 0
+    assert_select "a", text: "View report", count: 0
+
+    get tenant_dashboard_roles_path
+    assert_redirected_to tenant_dashboard_path
+    assert_equal "You are not authorized to access that page.", flash[:alert]
   end
 
   test "is forbidden for platform admins on their organization domain" do
@@ -65,6 +86,9 @@ class Tenant::DashboardsControllerTest < ActionDispatch::IntegrationTest
     host! "www.example.com"
 
     get "/dashboard"
+    assert_response :not_found
+
+    get "/dashboard/roles"
     assert_response :not_found
   end
 

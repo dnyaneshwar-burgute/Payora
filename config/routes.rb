@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   constraints OrganizationDomain do
     scope module: :tenant, as: :tenant do
       resource :dashboard, only: :show
+      get "dashboard/roles", to: "dashboards#roles", as: :dashboard_roles
       root "dashboards#show"
     end
   end
