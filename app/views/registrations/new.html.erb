@@ -1,0 +1,64 @@
+<% content_for :title, "Register organization" %>
+<% content_for :column_class, "col-md-8 col-lg-6" %>
+
+<h2 class="h5 mb-1">Register your organization</h2>
+<p class="text-muted small mb-4">You will be the owner of the new organization.</p>
+
+<% if @organization.errors[:base].any? %>
+  <div class="alert alert-danger"><%= @organization.errors[:base].to_sentence %></div>
+<% end %>
+
+<%= form_with model: @organization, url: registration_path do |form| %>
+  <h3 class="h6 text-uppercase text-muted">Organization</h3>
+
+  <div class="mb-3">
+    <%= form.label :name, class: "form-label" %>
+    <%= form.text_field :name, required: true, autofocus: true, class: field_class(@organization, :name) %>
+    <%= field_errors(@organization, :name) %>
+  </div>
+
+  <div class="mb-4">
+    <%= form.label :host, class: "form-label" %>
+    <%= form.text_field :host, required: true, placeholder: "acme.example.com", class: field_class(@organization, :host) %>
+    <%= field_errors(@organization, :host) %>
+  </div>
+
+  <h3 class="h6 text-uppercase text-muted">Owner account</h3>
+
+  <%= form.fields_for :users do |user_form| %>
+    <% user = user_form.object %>
+
+    <div class="row">
+      <div class="col-sm-6 mb-3">
+        <%= user_form.label :first_name, class: "form-label" %>
+        <%= user_form.text_field :first_name, required: true, autocomplete: "given-name", class: field_class(user, :first_name) %>
+        <%= field_errors(user, :first_name) %>
+      </div>
+
+      <div class="col-sm-6 mb-3">
+        <%= user_form.label :last_name, class: "form-label" %>
+        <%= user_form.text_field :last_name, required: true, autocomplete: "family-name", class: field_class(user, :last_name) %>
+        <%= field_errors(user, :last_name) %>
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <%= user_form.label :email_address, class: "form-label" %>
+      <%= user_form.email_field :email_address, required: true, autocomplete: "username", class: field_class(user, :email_address) %>
+      <%= field_errors(user, :email_address) %>
+    </div>
+
+    <div class="mb-3">
+      <%= user_form.label :phone_number, class: "form-label" %>
+      <span class="text-muted small">(optional)</span>
+      <%= user_form.telephone_field :phone_number, autocomplete: "tel", class: field_class(user, :phone_number) %>
+      <%= field_errors(user, :phone_number) %>
+    </div>
+  <% end %>
+
+  <%= form.submit "Register organization", class: "btn btn-primary w-100 mt-2" %>
+<% end %>
+
+<div class="text-center mt-3 small">
+  Already have an account? <%= link_to "Sign in", new_session_path %>
+</div>

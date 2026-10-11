@@ -1,0 +1,10 @@
+<p>Hi <%= @user.first_name %>,</p>
+
+<p>
+  You have been invited to join <strong><%= @organization.name %></strong> as <strong><%= @invitation.role.name %></strong>.
+</p>
+
+<p>
+  <%= link_to "Set your password", edit_invitation_url(@token, host: @organization.host) %> to activate your account.
+  This link will expire in <%= distance_of_time_in_words(0, Invitation::EXPIRES_IN) %>.
+</p>

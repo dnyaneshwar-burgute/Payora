@@ -1,0 +1,33 @@
+<% content_for :title, "Users by role" %>
+
+<div class="container py-4">
+  <%= link_to "← Dashboard", tenant_dashboard_path, class: "small text-decoration-none" %>
+
+  <h1 class="h4 mt-2 mb-1">Users by role</h1>
+  <p class="text-muted small mb-3">Active role assignments in <%= @organization.name %>.</p>
+
+  <div class="card shadow-sm">
+    <table class="table table-hover align-middle mb-0">
+      <thead>
+        <tr>
+          <th>Role</th>
+          <th class="text-end">Users</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @role_user_counts.each do |role, count| %>
+          <tr>
+            <td><%= role.name %></td>
+            <td class="text-end"><%= count %></td>
+          </tr>
+        <% end %>
+
+        <% if @role_user_counts.empty? %>
+          <tr>
+            <td colspan="2" class="text-center text-muted py-4">No roles found.</td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

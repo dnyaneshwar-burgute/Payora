@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <%= render "layouts/head" %>
+
+    <%= vite_client_tag %>
+    <%= vite_stylesheet_tag "auth.css" %>
+    <%= stylesheet_link_tag :app %>
+  </head>
+
+  <body class="bg-light">
+    <main class="container py-5">
+      <div class="row justify-content-center">
+        <div class="<%= content_for(:column_class) || "col-md-6 col-lg-4" %>">
+          <h1 class="h4 text-center mb-4">
+            <%= link_to "Salary Management System", root_path, class: "text-decoration-none text-body" %>
+          </h1>
+
+          <%= render "layouts/flash" %>
+
+          <div class="card shadow-sm">
+            <div class="card-body p-4">
+              <%= yield %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>

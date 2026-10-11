@@ -1,0 +1,33 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  role: one
+  effective_from: 2026-09-30 15:21:45
+  effective_to: 2026-09-30 15:21:45
+  assigned_by: one
+
+two:
+  user: two
+  role: two
+  effective_from: 2026-09-30 15:21:45
+  effective_to: 2026-09-30 15:21:45
+  assigned_by: two
+
+admin:
+  user: admin
+  role: platform_admin
+  effective_from: <%= 1.day.ago.to_fs(:db) %>
+  assigned_by: admin
+
+acme_owner:
+  user: acme_owner
+  role: acme_owner
+  effective_from: <%= 1.day.ago.to_fs(:db) %>
+  assigned_by: acme_owner
+
+pending_owner:
+  user: pending_owner
+  role: pending_owner
+  effective_from: <%= 1.day.ago.to_fs(:db) %>
+  assigned_by: pending_owner
